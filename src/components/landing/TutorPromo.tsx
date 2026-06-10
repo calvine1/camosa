@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle2, DollarSign, Globe, Award } from 'lucide-react';
@@ -11,13 +12,13 @@ export default function TutorPromo() {
 
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          
+
           {/* Left Grid: Illustration / Visuals */}
           <div className="lg:col-span-5 order-2 lg:order-1">
             <div className="relative">
               {/* Outer decorative glow */}
               <div className="absolute inset-0 bg-gradient-to-br from-primary to-indigo-500 rounded-3xl blur-2xl opacity-10 pointer-events-none" />
-              
+
               {/* Main Card */}
               <div className="relative p-8 rounded-3xl border border-border bg-background shadow-xl space-y-6">
                 <div className="flex items-center gap-3">
@@ -26,7 +27,7 @@ export default function TutorPromo() {
                   </div>
                   <span className="font-bold text-foreground">Why Teach with Us?</span>
                 </div>
-                
+
                 <div className="space-y-4">
                   {[
                     { title: 'Global Reach', desc: 'Share your clinical expertise with thousands of therapists worldwide.', icon: Globe },
@@ -43,14 +44,6 @@ export default function TutorPromo() {
                     </div>
                   ))}
                 </div>
-
-                <div className="p-4 rounded-2xl bg-primary/5 dark:bg-primary/15 border border-primary/20 flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-muted-foreground font-semibold">Average Instructor Monthly Salary</p>
-                    <p className="text-2xl font-black text-primary mt-1">$4,850</p>
-                  </div>
-                  <Badge className="bg-primary text-primary-foreground font-bold">Top Partner</Badge>
-                </div>
               </div>
             </div>
           </div>
@@ -60,14 +53,14 @@ export default function TutorPromo() {
             <Badge variant="outline" className="border-indigo-500/30 text-indigo-500 px-3 py-1 font-bold text-xs uppercase tracking-wider rounded-full">
               Tutor Portal
             </Badge>
-            
+
             <h2 className="text-3xl md:text-5xl font-extrabold text-foreground tracking-tight leading-tight">
               Share Your Knowledge. <br />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-indigo-500">
                 Inspire the Next Generation.
               </span>
             </h2>
-            
+
             <p className="text-lg text-muted-foreground leading-relaxed">
               Join Camosa Medtech&apos;s elite circle of clinical educators. We provide modern video tools, curriculum structuring assistance, and marketing resources to help you reach professionals globally.
             </p>
@@ -87,12 +80,16 @@ export default function TutorPromo() {
             </ul>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button size="lg" className="rounded-full shadow-lg shadow-primary/10 h-13 px-8 font-bold">
-                Apply as a Tutor
-              </Button>
-              <Button variant="ghost" size="lg" className="rounded-full h-13 px-8 font-bold hover:bg-secondary">
-                Learn How It Works
-              </Button>
+              <Link href="/tutor">
+                <Button size="lg" className="rounded-full shadow-lg shadow-primary/10 h-13 px-8 font-bold">
+                  Apply as a Tutor
+                </Button>
+              </Link>
+              <Link href="#tutor-program">
+                <Button variant="ghost" size="lg" className="rounded-full h-13 px-8 font-bold hover:bg-secondary">
+                  Learn How It Works
+                </Button>
+              </Link>
             </div>
           </div>
 

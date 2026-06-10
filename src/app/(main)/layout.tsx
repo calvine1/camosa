@@ -27,7 +27,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           
           {/* Logo */}
           <Link href="/" className="group hover:opacity-90 transition-opacity">
-            <CamosaLogo size="md" />
+            <CamosaLogo size="sm" />
           </Link>
           
           {/* Center Navigation Links */}

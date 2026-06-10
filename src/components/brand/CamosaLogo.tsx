@@ -8,7 +8,7 @@ type CamosaLogoProps = {
 };
 
 const sizeMap = {
-  sm: { h: 36, w: 120 },
+  sm: { h: 24, w: 80 },
   md: { h: 44, w: 148 },
   lg: { h: 56, w: 188 },
 };
