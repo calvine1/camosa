@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuthStore } from '@/store/useAuthStore';
-import { Loader2, User, GraduationCap } from 'lucide-react';
+import { Loader2, User } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { toAppUser } from '@/lib/auth/user';
 import { setRememberMePreference } from '@/lib/auth/remember-me';
@@ -19,7 +19,6 @@ const signupSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
-  role: z.enum(['learner', 'tutor']),
 });
 
 type SignupFormValues = z.infer<typeof signupSchema>;
@@ -34,17 +33,10 @@ export default function SignupPage() {
   const {
     register,
     handleSubmit,
-    setValue,
-    watch,
     formState: { errors },
   } = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
-    defaultValues: {
-      role: 'learner',
-    },
   });
-
-  const selectedRole = watch('role');
 
   const onSubmit = async (data: SignupFormValues) => {
     setIsLoading(true);
@@ -60,8 +52,7 @@ export default function SignupPage() {
       options: {
         data: {
           name: data.name,
-          role: data.role,
-          staff_role: data.role === 'tutor' ? 'tutor' : undefined,
+          role: 'learner',
         },
       },
     });
@@ -74,11 +65,7 @@ export default function SignupPage() {
 
     if (signUpData.user && signUpData.session) {
       login(toAppUser(signUpData.user));
-      if (data.role === 'tutor') {
-        router.push('/tutor');
-      } else {
-        router.push('/dashboard');
-      }
+      router.push('/dashboard');
     } else {
       setInfoMessage('Account created. Please verify your email, then sign in.');
       router.push('/login');
@@ -91,35 +78,10 @@ export default function SignupPage() {
     <div className="space-y-6">
       <div className="space-y-2">
         <h1 className="text-3xl font-extrabold text-foreground tracking-tight">Create an account</h1>
-        <p className="text-muted-foreground font-medium">Join Camosa Medtech and start your clinical journey today.</p>
+        <p className="text-muted-foreground font-medium">Join Camosa Medtech as a learner and start your clinical journey today.</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-        <div className="grid grid-cols-2 gap-4">
-          <div 
-            onClick={() => setValue('role', 'learner')}
-            className={`cursor-pointer p-4 rounded-2xl border-2 transition-all duration-200 flex flex-col items-center gap-2 ${
-              selectedRole === 'learner' 
-              ? 'border-primary bg-primary/5 dark:bg-primary/10' 
-              : 'border-border hover:border-border/80 bg-card text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            <User className={`w-6 h-6 ${selectedRole === 'learner' ? 'text-primary' : 'text-muted-foreground'}`} />
-            <span className={`text-sm font-bold ${selectedRole === 'learner' ? 'text-primary' : 'text-muted-foreground'}`}>Learner</span>
-          </div>
-          <div 
-            onClick={() => setValue('role', 'tutor')}
-            className={`cursor-pointer p-4 rounded-2xl border-2 transition-all duration-200 flex flex-col items-center gap-2 ${
-              selectedRole === 'tutor' 
-              ? 'border-primary bg-primary/5 dark:bg-primary/10' 
-              : 'border-border hover:border-border/80 bg-card text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            <GraduationCap className={`w-6 h-6 ${selectedRole === 'tutor' ? 'text-primary' : 'text-muted-foreground'}`} />
-            <span className={`text-sm font-bold ${selectedRole === 'tutor' ? 'text-primary' : 'text-muted-foreground'}`}>Tutor</span>
-          </div>
-        </div>
-
         <div className="space-y-2">
           <Label htmlFor="name" className="text-foreground/90 font-semibold text-sm">Full name</Label>
           <Input

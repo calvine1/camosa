@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { useAuthStore } from '@/store/useAuthStore';
 import { createClient } from '@/lib/supabase/client';
 import ProfilePictureUpload from '@/components/profile/ProfilePictureUpload';
+import TutorManagement from '@/components/tutor/TutorManagement';
 import {
   TUTOR_STAFF_ROLES,
   getTutorStaffLabel,
@@ -364,6 +365,22 @@ export default function TutorSettings() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Tutor Management */}
+        {(user?.staffRole === 'admin' || user?.staffRole === 'board_member') && (
+          <Card className="border-border bg-card shadow-sm">
+            <CardHeader className="pb-4 border-b border-border/60">
+              <CardTitle className="text-lg font-bold flex items-center gap-2">
+                <Building2 className="w-5 h-5 text-primary" />
+                Manage Tutors
+              </CardTitle>
+              <CardDescription>Add new tutors and administrators to the portal.</CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6">
+              <TutorManagement />
+            </CardContent>
+          </Card>
+        )}
 
         {/* Payout Information */}
         <Card className="border-border bg-card shadow-sm">

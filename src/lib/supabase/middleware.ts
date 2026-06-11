@@ -73,6 +73,20 @@ export async function updateSession(request: NextRequest) {
   if (user) {
     const role = getUserRole(user);
 
+    // Check if user needs to change password (new tutors only)
+    const needsPasswordChange = user.user_metadata?.needs_password_change === true;
+    const isChangePasswordPage = pathname === '/tutor/change-password';
+
+    // Force password change for new tutor accounts
+    if (needsPasswordChange && !isChangePasswordPage && isTutorRoute(pathname)) {
+      return NextResponse.redirect(new URL('/tutor/change-password', request.url));
+    }
+
+    // Allow access to change-password page regardless of role
+    if (isChangePasswordPage) {
+      return supabaseResponse;
+    }
+
     if (isTutorRoute(pathname) && role !== "tutor") {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }

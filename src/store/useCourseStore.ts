@@ -97,7 +97,8 @@ export const useCourseStore = create<CourseState>((set, get) => ({
 
       set({ courses: formattedCourses, isLoading: false });
     } catch (error) {
-      console.error('Error fetching courses:', error);
+      const errorMessage = error instanceof Error ? error.message : JSON.stringify(error);
+      console.error('Error fetching courses:', errorMessage, error);
       set({ isLoading: false });
     }
   },
@@ -105,6 +106,15 @@ export const useCourseStore = create<CourseState>((set, get) => ({
   addCourse: async (courseData, tutorId) => {
     const supabase = createClient();
     try {
+      // Debug: Check authenticated user before inserting
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      console.log('Adding course debug info:', {
+        tutorId,
+        authUserId: authUser?.id,
+        authUserEmail: authUser?.email,
+        authUserRole: authUser?.user_metadata?.role,
+      });
+
       const { data, error } = await supabase
         .from('courses')
         .insert({
@@ -123,7 +133,8 @@ export const useCourseStore = create<CourseState>((set, get) => ({
       if (error) throw error;
       await get().fetchCourses(); // Refresh
     } catch (error) {
-      console.error('Error adding course:', error);
+      const errorMessage = error instanceof Error ? error.message : JSON.stringify(error);
+      console.error('Error adding course:', errorMessage, { originalError: error, courseData });
     }
   },
 
@@ -147,7 +158,8 @@ export const useCourseStore = create<CourseState>((set, get) => ({
       if (error) throw error;
       await get().fetchCourses(); // Refresh
     } catch (error) {
-      console.error('Error updating course:', error);
+      const errorMessage = error instanceof Error ? error.message : JSON.stringify(error);
+      console.error('Error updating course:', errorMessage, { originalError: error, id, updates });
     }
   },
 
@@ -158,7 +170,8 @@ export const useCourseStore = create<CourseState>((set, get) => ({
       if (error) throw error;
       await get().fetchCourses(); // Refresh
     } catch (error) {
-      console.error('Error deleting course:', error);
+      const errorMessage = error instanceof Error ? error.message : JSON.stringify(error);
+      console.error('Error deleting course:', errorMessage, { originalError: error, id });
     }
   },
 
@@ -173,7 +186,8 @@ export const useCourseStore = create<CourseState>((set, get) => ({
       if (error) throw error;
       await get().fetchCourses(); // Refresh
     } catch (error) {
-      console.error('Error adding video:', error);
+      const errorMessage = error instanceof Error ? error.message : JSON.stringify(error);
+      console.error('Error adding video:', errorMessage, { originalError: error, courseId, video });
     }
   },
 
@@ -190,7 +204,8 @@ export const useCourseStore = create<CourseState>((set, get) => ({
       if (error) throw error;
       await get().fetchCourses(); // Refresh
     } catch (error) {
-      console.error('Error adding webinar:', error);
+      const errorMessage = error instanceof Error ? error.message : JSON.stringify(error);
+      console.error('Error adding webinar:', errorMessage, { originalError: error, courseId, webinar });
     }
   },
 }));
